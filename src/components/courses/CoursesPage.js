@@ -1,11 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import * as courseActions from "../../redux/actions/courseActions";
 import PropTypes from "prop-types";
 import { bindActionCreators } from "redux";
+import CourseList from "./CoursesList";
 
 const CoursesPage = props => {
-  // const [courses, setCourses] = useState([]); // holds a number of courses
+  useEffect(() => {
+    props.actions.loadCourses().catch(error => {
+      console.log(error);
+    });
+  }, []);
 
   const [course, setCourse] = useState({ title: "" }); // stores individual course object
 
@@ -29,20 +34,14 @@ const CoursesPage = props => {
           placeholder="Enter the title of the course"
         />
         <input type="submit" value="Save" />
-        {props.courses.map((val, index) => {
-          return (
-            <ul key={index}>
-              <li>{val.title}</li>
-            </ul>
-          );
-        })}
+        <CourseList courses={props.courses} />
       </form>
     </div>
   );
 };
 
 CoursesPage.propTypes = {
-  dispatch: PropTypes.func.isRequired,
+  // dispatch: PropTypes.func.isRequired,
   courses: PropTypes.array.isRequired,
   actions: PropTypes.object.isRequired
 };
