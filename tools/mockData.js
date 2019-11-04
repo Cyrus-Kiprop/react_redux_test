@@ -77,6 +77,7 @@ const authors = [
   { id: 3, name: "Dan Wahlin" }
 ];
 
+// blueprints of a course object
 const newCourse = {
   id: null,
   title: "",
