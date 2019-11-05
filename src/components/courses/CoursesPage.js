@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
+import { Redirect } from "react-router-dom";
+
 import * as courseActions from "../../redux/actions/courseActions";
 import * as authorActions from "../../redux/actions/authorActions";
 import PropTypes from "prop-types";
@@ -7,6 +9,7 @@ import { bindActionCreators } from "redux";
 import CourseList from "./CoursesList";
 
 const CoursesPage = props => {
+  const [redirectToAddCoursePage, setRedirectToAddCoursePage] = useState(false);
   useEffect(() => {
     if (props.courses.length === 0) {
       props.actions.loadCourses().catch(error => {
@@ -34,7 +37,19 @@ const CoursesPage = props => {
 
   return (
     <div>
+      {redirectToAddCoursePage && <Redirect to="/course" />}
       <h2>Courses</h2>
+
+      <button
+        style={{ marginBottom: 20 }}
+        className="btn btn-primary add-course"
+        // sets the redirectToCoursePage to true hence the display of the Add  Course Button
+
+        onClick={() => setRedirectToAddCoursePage(true)}
+      >
+        Add Course
+      </button>
+
       <form onSubmit={handleSubmit}>
         <input
           type="text"

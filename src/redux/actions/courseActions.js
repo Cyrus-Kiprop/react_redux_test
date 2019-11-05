@@ -33,11 +33,12 @@ export const loadCourses = () => {
 };
 
 // aysnc writes
+// the getState argument contains all the items in the state but not necessary to use
 export const saveCourse = course => (dispatch, getState) => {
-  return coursesApi
-    .saveCourse(course) //call the api request with the course objects
+  coursesApi
+    .saveCourse(course)
     .then(savedCourse => {
-      course.id
+      savedCourse.id
         ? dispatch(updatedCourseSuccess(savedCourse))
         : dispatch(createCoursesSuccess(savedCourse));
     })
@@ -45,13 +46,3 @@ export const saveCourse = course => (dispatch, getState) => {
       throw err;
     });
 };
-
-// export function saveCourse(course) {
-//   return function(dispatch) {
-//     return coursesApi.saveCourse(course).then(savedCourse => {
-//       course.id
-//         ? dispatch(updatedCourseSuccess(savedCourse))
-//         : dispatch(createCoursesSuccess(savedCourse));
-//     });
-//   };
-// }

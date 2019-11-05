@@ -5,6 +5,7 @@ import * as authorActions from "../../redux/actions/authorActions";
 import PropTypes from "prop-types";
 import CourseForm from "./CourseForm";
 import { newCourse } from "../../../tools/mockData";
+import { Redirect } from "react-router-dom";
 
 const ManageCoursePage = ({
   loadCourses,
@@ -12,6 +13,7 @@ const ManageCoursePage = ({
   courses,
   authors,
   saveCourse,
+  history,
   ...props
 }) => {
   const [course, setCourse] = useState(props.course);
@@ -32,6 +34,7 @@ const ManageCoursePage = ({
   const handleSave = event => {
     event.preventDefault();
     saveCourse(course);
+    history.push("./courses");
   };
 
   useEffect(() => {
@@ -39,13 +42,15 @@ const ManageCoursePage = ({
       loadCourses().catch(error => {
         console.log(error);
       });
+    } else {
+      setCourse({ ...props.course });
     }
 
     if (authors.length === 0) console.log("fetched the data");
     loadAuthors().catch(error => {
       alert("loading Authors faied" + error);
     });
-  }, []);
+  }, [props.course]);
 
   return (
     <CourseForm
@@ -65,12 +70,23 @@ ManageCoursePage.propTypes = {
   saveCourse: PropTypes.func.isRequired,
   authors: PropTypes.array.isRequired,
   loadCourses: PropTypes.func.isRequired,
-  loadAuthors: PropTypes.func.isRequired
+  loadAuthors: PropTypes.func.isRequired,
+  history: PropTypes.object.isRequired
 };
+// This is a redux selector
+export function getCourseBySlug(courses, slug) {
+  return courses.find(course => course.slug === slug) || null;
+}
 
-const mapStateToProps = state => {
+const mapStateToProps = (state, ownProps) => {
+  const slug = ownProps.match.params.slug;
+
+  const course =
+    slug && state.courses.length > 0
+      ? getCourseBySlug(state.courses, slug)
+      : newCourse;
   return {
-    course: newCourse,
+    course,
     courses: state.courses,
     authors: state.authors
   };
