@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
+import Spinner from "../common/Spinner";
 
 import * as courseActions from "../../redux/actions/courseActions";
 import * as authorActions from "../../redux/actions/authorActions";
@@ -39,7 +40,7 @@ const CoursesPage = props => {
     <div>
       {redirectToAddCoursePage && <Redirect to="/course" />}
       <h2>Courses</h2>
-
+      <Spinner />
       <button
         style={{ marginBottom: 20 }}
         className="btn btn-primary add-course"
@@ -68,7 +69,8 @@ CoursesPage.propTypes = {
   // dispatch: PropTypes.func.isRequired,
   courses: PropTypes.array.isRequired,
   actions: PropTypes.object.isRequired,
-  authors: PropTypes.array.isRequired
+  authors: PropTypes.array.isRequired,
+  loading: PropTypes.bool.isRequired
 };
 
 const mapStateToProps = state => {
@@ -90,7 +92,8 @@ const mapStateToProps = state => {
               )
             };
           }),
-    authors: state.authors
+    authors: state.authors,
+    loading: state.apiCallsInProgress
   };
 };
 

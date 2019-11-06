@@ -1,6 +1,8 @@
 import * as types from "../actions/actionTypes";
 // import some apis from the api folder
 import * as coursesApi from "../../api/courseApi";
+import { beginApiCall } from "./apiStatusActions";
+
 // import { dispatch } from "rxjs/internal/observable/range";
 
 // Actions
@@ -21,6 +23,7 @@ export const createCoursesSuccess = course => {
 // fetching data
 export const loadCourses = () => {
   return dispatch => {
+    dispatch(beginApiCall());
     return coursesApi
       .getCourses()
       .then(courses => {
@@ -35,6 +38,8 @@ export const loadCourses = () => {
 // aysnc writes
 // the getState argument contains all the items in the state but not necessary to use
 export const saveCourse = course => (dispatch, getState) => {
+  dispatch(beginApiCall());
+
   coursesApi
     .saveCourse(course)
     .then(savedCourse => {
