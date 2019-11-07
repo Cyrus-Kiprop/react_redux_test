@@ -10,7 +10,7 @@ export const courseReducer = (state = initialState.courses, action) => {
     case types.CREATE_COURSE_SUCCESS:
       return [...state, { ...action.course }];
     case types.UPDATE_COURSE_SUCCESS:
-      return state.courses.map(course =>
+      return state.map(course =>
         course.id === action.course.id ? action.course : course
       );
     default:

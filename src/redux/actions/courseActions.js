@@ -37,17 +37,32 @@ export const loadCourses = () => {
 
 // aysnc writes
 // the getState argument contains all the items in the state but not necessary to use
-export const saveCourse = course => (dispatch, getState) => {
-  dispatch(beginApiCall());
+// export const saveCourse = course => (dispatch, getState) => {
+//   dispatch(beginApiCall());
+//   coursesApi
+//     .saveCourse(course)
+//     .then(savedCourse => {
+//       savedCourse.id
+//         ? dispatch(updatedCourseSuccess(savedCourse))
+//         : dispatch(createCoursesSuccess(savedCourse));
+//     })
+//     .catch(err => {
+//       throw err;
+//     });
+// };
 
-  coursesApi
-    .saveCourse(course)
-    .then(savedCourse => {
-      savedCourse.id
-        ? dispatch(updatedCourseSuccess(savedCourse))
-        : dispatch(createCoursesSuccess(savedCourse));
-    })
-    .catch(err => {
-      throw err;
-    });
-};
+export function saveCourse(course) {
+  return function(dispatch, getState) {
+    dispatch(beginApiCall());
+    coursesApi
+      .saveCourse(course)
+      .then(savedCourse => {
+        savedCourse.id
+          ? dispatch(updatedCourseSuccess(savedCourse))
+          : dispatch(createCoursesSuccess(savedCourse));
+      })
+      .catch(err => {
+        throw err;
+      });
+  };
+}

@@ -52,7 +52,7 @@ const CourseForm = props => {
       />
 
       <button type="submit" disabled={saving} className="btn btn-primary">
-        {saving ? "Saving..." : "Save"}
+        {saving ? "saving..." : "save"}
       </button>
     </form>
   );

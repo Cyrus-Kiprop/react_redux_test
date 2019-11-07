@@ -5,8 +5,8 @@ import * as authorActions from "../../redux/actions/authorActions";
 import PropTypes from "prop-types";
 import CourseForm from "./CourseForm";
 import { newCourse } from "../../../tools/mockData";
-import { Redirect } from "react-router-dom";
 import Spinner from "../common/Spinner";
+import { toast } from "react-toastify";
 
 const ManageCoursePage = ({
   loadCourses,
@@ -17,26 +17,11 @@ const ManageCoursePage = ({
   history,
   ...props
 }) => {
-  const [course, setCourse] = useState(props.course);
+  // console.log(props.course);
+  const [course, setCourse] = useState(props.course); // this is a single object {title: ""}
+  const [saving, setSaving] = useState(false);
 
   const [errors, setErrors] = useState({});
-
-  // handler functions
-  const handleChange = event => {
-    const { name, value } = event.target;
-    setCourse(prevState => ({
-      ...prevState,
-      [name]: name === "authorId" ? parseInt(value, 10) : value
-    }));
-    console.log(course);
-  };
-
-  // onSave handler functions
-  const handleSave = event => {
-    event.preventDefault();
-    saveCourse(course);
-    history.push("./courses");
-  };
 
   useEffect(() => {
     if (courses.length === 0) {
@@ -53,6 +38,32 @@ const ManageCoursePage = ({
     });
   }, [props.course]);
 
+  // handler functions
+  const handleChange = event => {
+    const { name, value } = event.target;
+    setCourse(prevState => ({
+      ...prevState,
+      [name]: name === "authorId" ? parseInt(value, 10) : value
+    }));
+    console.log(course);
+  };
+
+  // onSave handler functions
+  const handleSave = event => {
+    event.preventDefault();
+    console.log(course);
+    setSaving(true);
+    saveCourse(course)
+      .then(() => {
+        toast.success("Course saved successfully.");
+        history.push("/courses");
+      })
+      .catch(err => {
+        setSaving(false);
+        setErrors({ onSave: err.message });
+      });
+  };
+
   return courses.length === 0 || authors.length === 0 ? (
     <Spinner />
   ) : (
@@ -62,6 +73,7 @@ const ManageCoursePage = ({
       errors={errors}
       onChange={handleChange}
       onSave={handleSave}
+      saving={saving}
     />
   );
 };
