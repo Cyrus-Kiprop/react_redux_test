@@ -6,6 +6,7 @@ import PropTypes from "prop-types";
 import CourseForm from "./CourseForm";
 import { newCourse } from "../../../tools/mockData";
 import { Redirect } from "react-router-dom";
+import Spinner from "../common/Spinner";
 
 const ManageCoursePage = ({
   loadCourses,
@@ -52,7 +53,9 @@ const ManageCoursePage = ({
     });
   }, [props.course]);
 
-  return (
+  return courses.length === 0 || authors.length === 0 ? (
+    <Spinner />
+  ) : (
     <CourseForm
       authors={authors}
       course={course}

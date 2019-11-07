@@ -40,27 +40,31 @@ const CoursesPage = props => {
     <div>
       {redirectToAddCoursePage && <Redirect to="/course" />}
       <h2>Courses</h2>
-      <Spinner />
-      <button
-        style={{ marginBottom: 20 }}
-        className="btn btn-primary add-course"
-        // sets the redirectToCoursePage to true hence the display of the Add  Course Button
+      {props.loading ? (
+        <Spinner />
+      ) : (
+        <>
+          <button
+            style={{ marginBottom: 20 }}
+            className="btn btn-primary add-course"
+            // sets the redirectToCoursePage to true hence the display of the Add  Course Button
 
-        onClick={() => setRedirectToAddCoursePage(true)}
-      >
-        Add Course
-      </button>
+            onClick={() => setRedirectToAddCoursePage(true)}
+          >
+            Add Course
+          </button>
+          <form onSubmit={handleSubmit}>
+            <input
+              type="text"
+              onChange={handleChange}
+              placeholder="Enter the title of the course"
+            />
+            <input type="submit" value="Save" />
 
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          onChange={handleChange}
-          placeholder="Enter the title of the course"
-        />
-        <input type="submit" value="Save" />
-
-        <CourseList courses={props.courses} />
-      </form>
+            <CourseList courses={props.courses} />
+          </form>
+        </>
+      )}
     </div>
   );
 };
@@ -93,7 +97,7 @@ const mapStateToProps = state => {
             };
           }),
     authors: state.authors,
-    loading: state.apiCallsInProgress
+    loading: state.apiCallsInProgress === 0
   };
 };
 
